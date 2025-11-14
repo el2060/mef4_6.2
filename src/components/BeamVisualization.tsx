@@ -90,7 +90,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
           {/* Support B (Hinge) */}
           <g transform={`translate(${supportBX}, ${beamY + 20})`}>
             <motion.circle
-              r={16}
+              r={18}
               fill={selectedPivot === 'B' ? '#007AFF' : '#666'}
               stroke="#fff"
               strokeWidth={3}
@@ -98,7 +98,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               animate={{ scale: 1 }}
               transition={{ delay: 0.3 }}
             />
-            <text y={50} textAnchor="middle" fill="#383838" fontSize="28" fontWeight="bold">
+            <text y={60} textAnchor="middle" fill="#383838" fontSize="32" fontWeight="bold">
               B
             </text>
           </g>
@@ -106,10 +106,10 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
           {/* Support D (Roller) */}
           <g transform={`translate(${supportDX}, ${beamY + 20})`}>
             <motion.rect
-              x={-14}
-              y={-7}
-              width={28}
-              height={14}
+              x={-16}
+              y={-8}
+              width={32}
+              height={16}
               fill={selectedPivot === 'D' ? '#21AD93' : '#666'}
               stroke="#fff"
               strokeWidth={2}
@@ -118,7 +118,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               animate={{ scale: 1 }}
               transition={{ delay: 0.4 }}
             />
-            <text y={50} textAnchor="middle" fill="#383838" fontSize="28" fontWeight="bold">
+            <text y={60} textAnchor="middle" fill="#383838" fontSize="32" fontWeight="bold">
               D
             </text>
           </g>
@@ -126,13 +126,13 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
           {/* Center point C */}
           <g transform={`translate(${getXPosition(50)}, ${beamY})`}>
             <motion.circle
-              r={10}
+              r={12}
               fill={selectedPivot === 'C' ? '#FFE100' : '#999'}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.5 }}
             />
-            <text y={-25} textAnchor="middle" fill="#383838" fontSize="24" fontWeight="bold">
+            <text y={-30} textAnchor="middle" fill="#383838" fontSize="28" fontWeight="bold">
               C
             </text>
           </g>
@@ -165,10 +165,10 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               markerEnd="url(#arrowhead-down)"
             />
             <text
-              x={weightX + 20}
-              y={beamY - 90}
+              x={weightX + 25}
+              y={beamY - 100}
               fill={getArrowColor('weight')}
-              fontSize="28"
+              fontSize="32"
               fontWeight="bold"
             >
               W = 100N
@@ -195,21 +195,21 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
                 </marker>
               </defs>
               <motion.line
-                x1={supportBX - 15}
-                y1={beamY + 40}
-                x2={supportBX - 15}
-                y2={beamY + 40 + scaleArrow(reactionBVertical)}
+                x1={supportBX - 25}
+                y1={beamY + 50}
+                x2={supportBX - 25}
+                y2={beamY + 50 + scaleArrow(reactionBVertical)}
                 stroke={getArrowColor('reaction-b-v')}
-                strokeWidth="5"
+                strokeWidth="6"
                 markerEnd="url(#arrowhead-up-b)"
-                animate={{ y2: beamY + 40 + scaleArrow(reactionBVertical) }}
+                animate={{ y2: beamY + 50 + scaleArrow(reactionBVertical) }}
                 transition={{ duration: 0.3 }}
               />
               <text
-                x={supportBX - 70}
-                y={beamY + 120}
+                x={supportBX - 90}
+                y={beamY + 140}
                 fill={getArrowColor('reaction-b-v')}
-                fontSize="26"
+                fontSize="30"
                 fontWeight="bold"
               >
                 Rb,v
@@ -275,21 +275,21 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
                 </marker>
               </defs>
               <motion.line
-                x1={supportDX + 15}
-                y1={beamY + 40}
-                x2={supportDX + 15}
-                y2={beamY + 40 + scaleArrow(reactionD)}
+                x1={supportDX + 25}
+                y1={beamY + 50}
+                x2={supportDX + 25}
+                y2={beamY + 50 + scaleArrow(reactionD)}
                 stroke={getArrowColor('reaction-d')}
-                strokeWidth="5"
+                strokeWidth="6"
                 markerEnd="url(#arrowhead-up-d)"
-                animate={{ y2: beamY + 40 + scaleArrow(reactionD) }}
+                animate={{ y2: beamY + 50 + scaleArrow(reactionD) }}
                 transition={{ duration: 0.3 }}
               />
               <text
-                x={supportDX + 40}
-                y={beamY + 120}
+                x={supportDX + 50}
+                y={beamY + 140}
                 fill={getArrowColor('reaction-d')}
-                fontSize="26"
+                fontSize="30"
                 fontWeight="bold"
               >
                 Rd
@@ -314,10 +314,10 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
         {showTilt && Math.abs(tiltAngle) > 0.5 && (
           <motion.text
             x={width / 2}
-            y={50}
+            y={60}
             textAnchor="middle"
             fill={tiltAngle > 0 ? '#FF6E6C' : '#007AFF'}
-            fontSize="28"
+            fontSize="32"
             fontWeight="bold"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
