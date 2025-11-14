@@ -19,10 +19,11 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
   
   // SVG dimensions - increased for better readability
   const width = 1000
-  const height = 600
-  const beamY = height / 2
+  const height = 700 // Increased height for better spacing
+  const beamY = height / 2 - 50 // Moved beam higher to allow space below
   const beamLength = 900
   const beamStart = 50
+  const arrowSpacing = 70 // Vertical spacing between beam and arrows
   
   // Calculate tilt transform
   const tiltTransform = showTilt && tiltAngle !== 0
@@ -88,7 +89,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
           
           {/* Support markers */}
           {/* Support B (Hinge) */}
-          <g transform={`translate(${supportBX}, ${beamY + 20})`}>
+          <g transform={`translate(${supportBX}, ${beamY + 25})`}>
             <motion.circle
               r={18}
               fill={selectedPivot === 'B' ? '#007AFF' : '#666'}
@@ -98,13 +99,23 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               animate={{ scale: 1 }}
               transition={{ delay: 0.3 }}
             />
-            <text y={60} textAnchor="middle" fill="#383838" fontSize="32" fontWeight="bold">
+            <text 
+              y={-32} 
+              textAnchor="middle" 
+              fill="#383838" 
+              fontSize="28" 
+              fontWeight="bold"
+              style={{ 
+                filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.2))',
+                textShadow: '0 0 3px white'
+              }}
+            >
               B
             </text>
           </g>
           
           {/* Support D (Roller) */}
-          <g transform={`translate(${supportDX}, ${beamY + 20})`}>
+          <g transform={`translate(${supportDX}, ${beamY + 25})`}>
             <motion.rect
               x={-16}
               y={-8}
@@ -118,7 +129,17 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               animate={{ scale: 1 }}
               transition={{ delay: 0.4 }}
             />
-            <text y={60} textAnchor="middle" fill="#383838" fontSize="32" fontWeight="bold">
+            <text 
+              y={-32} 
+              textAnchor="middle" 
+              fill="#383838" 
+              fontSize="28" 
+              fontWeight="bold"
+              style={{ 
+                filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.2))',
+                textShadow: '0 0 3px white'
+              }}
+            >
               D
             </text>
           </g>
@@ -132,12 +153,22 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               animate={{ scale: 1 }}
               transition={{ delay: 0.5 }}
             />
-            <text y={-30} textAnchor="middle" fill="#383838" fontSize="28" fontWeight="bold">
+            <text 
+              y={45} 
+              textAnchor="middle" 
+              fill="#383838" 
+              fontSize="28" 
+              fontWeight="bold"
+              style={{ 
+                filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.2))',
+                textShadow: '0 0 3px white'
+              }}
+            >
               C
             </text>
           </g>
           
-          {/* Weight (downward arrow) */}
+          {/* Weight (downward arrow) - Snap Zone: Centered above beam */}
           <motion.g
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -157,25 +188,28 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
             </defs>
             <line
               x1={weightX}
-              y1={beamY - 20}
+              y1={beamY - 30}
               x2={weightX}
-              y2={beamY - 20 - scaleArrow(100)}
+              y2={beamY - 30 - scaleArrow(100)}
               stroke={getArrowColor('weight')}
-              strokeWidth="5"
+              strokeWidth="6"
               markerEnd="url(#arrowhead-down)"
             />
             <text
-              x={weightX + 25}
-              y={beamY - 100}
+              x={weightX + 30}
+              y={beamY - 140}
               fill={getArrowColor('weight')}
               fontSize="32"
               fontWeight="bold"
+              style={{ 
+                filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.3))'
+              }}
             >
               W = 100N
             </text>
           </motion.g>
           
-          {/* Reaction at B - Vertical (upward) */}
+          {/* Reaction at B - Vertical (upward) - Snap Zone: Below beam, left of support */}
           {forces.find((f) => f.id === 'reaction-b-v')?.identified && (
             <motion.g
               initial={{ opacity: 0, y: 20 }}
@@ -195,22 +229,25 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
                 </marker>
               </defs>
               <motion.line
-                x1={supportBX - 25}
-                y1={beamY + 50}
-                x2={supportBX - 25}
-                y2={beamY + 50 + scaleArrow(reactionBVertical)}
+                x1={supportBX - 40}
+                y1={beamY + arrowSpacing}
+                x2={supportBX - 40}
+                y2={beamY + arrowSpacing + scaleArrow(Math.abs(reactionBVertical))}
                 stroke={getArrowColor('reaction-b-v')}
                 strokeWidth="6"
                 markerEnd="url(#arrowhead-up-b)"
-                animate={{ y2: beamY + 50 + scaleArrow(reactionBVertical) }}
+                animate={{ y2: beamY + arrowSpacing + scaleArrow(Math.abs(reactionBVertical)) }}
                 transition={{ duration: 0.3 }}
               />
               <text
-                x={supportBX - 90}
-                y={beamY + 140}
+                x={supportBX - 100}
+                y={beamY + arrowSpacing + 160}
                 fill={getArrowColor('reaction-b-v')}
-                fontSize="30"
+                fontSize="32"
                 fontWeight="bold"
+                style={{ 
+                  filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.3))'
+                }}
               >
                 Rb,v
               </text>
@@ -255,7 +292,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
             </motion.g>
           )}
           
-          {/* Reaction at D (upward) */}
+          {/* Reaction at D (upward) - Snap Zone: Below beam, right of support */}
           {forces.find((f) => f.id === 'reaction-d')?.identified && (
             <motion.g
               initial={{ opacity: 0, y: 20 }}
@@ -275,22 +312,25 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
                 </marker>
               </defs>
               <motion.line
-                x1={supportDX + 25}
-                y1={beamY + 50}
-                x2={supportDX + 25}
-                y2={beamY + 50 + scaleArrow(reactionD)}
+                x1={supportDX + 40}
+                y1={beamY + arrowSpacing}
+                x2={supportDX + 40}
+                y2={beamY + arrowSpacing + scaleArrow(Math.abs(reactionD))}
                 stroke={getArrowColor('reaction-d')}
                 strokeWidth="6"
                 markerEnd="url(#arrowhead-up-d)"
-                animate={{ y2: beamY + 50 + scaleArrow(reactionD) }}
+                animate={{ y2: beamY + arrowSpacing + scaleArrow(Math.abs(reactionD)) }}
                 transition={{ duration: 0.3 }}
               />
               <text
-                x={supportDX + 50}
-                y={beamY + 140}
+                x={supportDX + 55}
+                y={beamY + arrowSpacing + 160}
                 fill={getArrowColor('reaction-d')}
-                fontSize="30"
+                fontSize="32"
                 fontWeight="bold"
+                style={{ 
+                  filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.3))'
+                }}
               >
                 Rd
               </text>
@@ -314,13 +354,17 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
         {showTilt && Math.abs(tiltAngle) > 0.5 && (
           <motion.text
             x={width / 2}
-            y={60}
+            y={50}
             textAnchor="middle"
             fill={tiltAngle > 0 ? '#FF6E6C' : '#007AFF'}
             fontSize="32"
             fontWeight="bold"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            style={{ 
+              filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.3))',
+              textShadow: '0 0 4px white'
+            }}
           >
             {tiltAngle > 0 ? '↻ Clockwise' : '↺ Counter-clockwise'}
           </motion.text>
