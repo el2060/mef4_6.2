@@ -23,7 +23,6 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
   const beamY = height / 2
   const beamLength = 500
   const beamStart = 50
-  const beamEnd = beamStart + beamLength
   
   // Calculate tilt transform
   const tiltTransform = showTilt && tiltAngle !== 0

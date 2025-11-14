@@ -18,20 +18,33 @@ export default function CompletionSummary({ onClose }: CompletionSummaryProps) {
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 20 }}
         transition={{ type: 'spring', duration: 0.5 }}
-        className="card max-w-2xl w-full bg-md-surface"
+        className="card max-w-2xl w-full bg-md-surface relative overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="text-center">
+        {/* Confetti Animation */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 0.7, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.7 }}
+          className="absolute inset-0 pointer-events-none z-0"
+        >
+          <div className="w-full h-10 flex justify-center items-center">
+            <span className="text-5xl animate-pulse">🎉</span>
+            <span className="text-4xl ml-2 animate-bounce">✨</span>
+            <span className="text-4xl ml-2 animate-bounce">🎊</span>
+          </div>
+        </motion.div>
+        <div className="text-center relative z-10">
           {/* Success Icon */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            className="w-20 h-20 mx-auto mb-6 bg-md-teal rounded-full flex items-center justify-center"
+            className="w-20 h-20 mx-auto mb-6 bg-md-teal rounded-full flex items-center justify-center shadow-lg"
           >
             <span className="text-4xl">🎉</span>
           </motion.div>
-          
+
           {/* Title */}
           <motion.h2
             initial={{ opacity: 0, y: 10 }}
@@ -41,7 +54,7 @@ export default function CompletionSummary({ onClose }: CompletionSummaryProps) {
           >
             Equilibrium Achieved!
           </motion.h2>
-          
+
           {/* Message */}
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -49,9 +62,9 @@ export default function CompletionSummary({ onClose }: CompletionSummaryProps) {
             transition={{ delay: 0.4 }}
             className="text-lg text-md-text/80 mb-6"
           >
-            Your configuration satisfies all equilibrium conditions.
+            Your configuration satisfies all equilibrium conditions. Experiment with different values to see how the system responds!
           </motion.p>
-          
+
           {/* Summary Points */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -79,7 +92,7 @@ export default function CompletionSummary({ onClose }: CompletionSummaryProps) {
               </li>
             </ul>
           </motion.div>
-          
+
           {/* Key Concepts */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -95,7 +108,7 @@ export default function CompletionSummary({ onClose }: CompletionSummaryProps) {
               <li>• <strong>Support Reactions:</strong> Forces exerted by supports (hinges, rollers, etc.)</li>
             </ul>
           </motion.div>
-          
+
           {/* Actions */}
           <div className="flex gap-3 justify-center">
             <motion.button
@@ -109,7 +122,7 @@ export default function CompletionSummary({ onClose }: CompletionSummaryProps) {
             >
               Try Again
             </motion.button>
-            
+
             <motion.button
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

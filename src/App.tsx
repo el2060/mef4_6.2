@@ -45,27 +45,28 @@ function App() {
   const allStepsComplete = step1Complete && step2Complete && step3Complete
 
   return (
-    <div className="min-h-screen bg-md-bg font-plexmono">
+    <div className="min-h-screen bg-md-bg font-plexmono flex flex-col">
       <Header />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-10">
         {/* Title Section */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="text-center mb-8"
+          className="text-center mb-10"
         >
-          <h1 className="text-4xl font-bold mb-3 text-md-text">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-md-text tracking-tight">
             Rigid Body Equilibrium Walk-Through
           </h1>
-          <p className="text-lg text-md-text/80">
-            Chapter 6.2 - Newton's First Law of Motion
+          <p className="text-lg md:text-xl text-md-text/80 font-medium">
+            Chapter 6.2 &mdash; Newton's First Law of Motion
           </p>
         </motion.div>
 
         {/* Step Indicator */}
-        <StepIndicator currentStep={currentStep} />
+        <div className="mb-8">
+          <StepIndicator currentStep={currentStep} />
+        </div>
 
         {/* Step Content */}
         <AnimatePresence mode="wait">
@@ -75,7 +76,7 @@ function App() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
-            className="mb-8"
+            className="mb-10"
           >
             {currentStep === 1 && <Step1IdentifyForces />}
             {currentStep === 2 && <Step2BalanceForces />}
@@ -84,18 +85,18 @@ function App() {
         </AnimatePresence>
 
         {/* Navigation Controls */}
-        <div className="flex justify-between items-center max-w-4xl mx-auto">
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-center max-w-3xl mx-auto mt-6">
           <button
             onClick={handleBack}
             disabled={currentStep === 1}
-            className="btn bg-md-surface text-md-text border border-md-border hover:bg-md-cloud disabled:opacity-50"
+            className="btn bg-md-surface text-md-text border border-md-border hover:bg-md-cloud focus-visible:ring-2 focus-visible:ring-md-blue disabled:opacity-50 shadow-sm"
           >
-            ← Back
+             Back
           </button>
 
           <button
             onClick={handleReset}
-            className="btn bg-md-coral text-white hover:bg-md-coral/90"
+            className="btn bg-md-coral text-white hover:bg-md-coral/90 focus-visible:ring-2 focus-visible:ring-md-coral shadow-sm"
           >
             Reset All
           </button>
@@ -104,9 +105,9 @@ function App() {
             <button
               onClick={handleNext}
               disabled={!canProceed(currentStep)}
-              className="btn bg-md-blue text-white hover:bg-md-blueHover disabled:opacity-50"
+              className="btn bg-md-blue text-white hover:bg-md-blue-hover focus-visible:ring-2 focus-visible:ring-md-blue disabled:opacity-50 shadow-sm"
             >
-              Next →
+              Next 
             </button>
           ) : (
             <div className="w-[120px]" /> // Spacer
@@ -120,6 +121,9 @@ function App() {
           )}
         </AnimatePresence>
       </main>
+      <footer className="text-center py-6 text-md-text/60 text-sm">
+        &copy; {new Date().getFullYear()} Rigid Body Simulator. All rights reserved.
+      </footer>
     </div>
   )
 }
