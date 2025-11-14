@@ -8,6 +8,7 @@ interface ForceSliderProps {
   max: number
   unit: string
   color?: 'blue' | 'teal' | 'turquoise' | 'coral'
+    helpText?: string
 }
 
 export default function ForceSlider({
@@ -18,6 +19,7 @@ export default function ForceSlider({
   max,
   unit,
   color = 'blue',
+    helpText,
 }: ForceSliderProps) {
   const colorClasses = {
     blue: 'accent-md-blue',
@@ -29,12 +31,21 @@ export default function ForceSlider({
   return (
     <div className="space-y-3">
       <div className="flex justify-between items-center">
-        <label className="text-sm font-semibold text-md-text" title={`Adjust the ${label} value`}>{label}</label>
+          <div className="flex flex-col">
+            <label className="text-base font-semibold text-md-text" title={`Adjust the ${label} value`}>
+              {label}
+            </label>
+            {helpText && (
+              <span className="text-xs text-md-text/60 mt-0.5 font-medium">
+                {helpText}
+              </span>
+            )}
+          </div>
         <motion.span
           key={value}
           initial={{ scale: 1.2 }}
           animate={{ scale: 1 }}
-          className="text-lg font-bold text-md-blue px-3 py-1 bg-md-blue/10 rounded-lg shadow-sm"
+            className="text-xl font-bold text-md-blue px-4 py-1.5 bg-md-blue/15 rounded-lg shadow-md border border-md-blue/20"
         >
           {value.toFixed(0)} {unit}
         </motion.span>
@@ -47,7 +58,7 @@ export default function ForceSlider({
           max={max}
           value={value}
           onChange={(e) => onChange(Number(e.target.value))}
-          className={`w-full h-4 rounded-lg appearance-none cursor-pointer bg-md-cloud ${colorClasses[color]} focus-visible:ring-2 focus-visible:ring-md-blue`}
+            className={`w-full h-5 rounded-full appearance-none cursor-pointer bg-md-cloud ${colorClasses[color]} focus-visible:ring-2 focus-visible:ring-md-blue transition-all`}
           style={{
             background: `linear-gradient(to right, 
               var(--md-${color}) 0%, 
@@ -59,12 +70,12 @@ export default function ForceSlider({
           aria-valuemin={min}
           aria-valuemax={max}
         />
-        <span className="absolute left-1/2 -top-7 -translate-x-1/2 bg-md-blue text-white text-xs px-2 py-1 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+          <span className="absolute left-1/2 -top-8 -translate-x-1/2 bg-md-text text-white text-xs px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
           Drag to adjust value
         </span>
       </div>
 
-      <div className="flex justify-between text-xs text-md-text/50">
+    <div className="flex justify-between text-sm text-md-text/60 font-medium">
         <span>{min} {unit}</span>
         <span>{max} {unit}</span>
       </div>

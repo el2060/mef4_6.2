@@ -91,19 +91,20 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
           {/* Support B (Hinge) */}
           <g transform={`translate(${supportBX}, ${beamY + 25})`}>
             <motion.circle
-              r={18}
-              fill={selectedPivot === 'B' ? '#007AFF' : '#666'}
+                r={20}
+                fill={selectedPivot === 'B' ? '#007AFF' : '#4A4A4A'}
               stroke="#fff"
-              strokeWidth={3}
+                strokeWidth={3.5}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.3 }}
+                style={{ filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.25))' }}
             />
             <text 
-              y={-32} 
+                y={-38} 
               textAnchor="middle" 
-              fill="#383838" 
-              fontSize="28" 
+                fill="#2A2A2A" 
+                fontSize="26" 
               fontWeight="bold"
               style={{ 
                 filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.2))',
@@ -117,23 +118,24 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
           {/* Support D (Roller) */}
           <g transform={`translate(${supportDX}, ${beamY + 25})`}>
             <motion.rect
-              x={-16}
-              y={-8}
-              width={32}
-              height={16}
-              fill={selectedPivot === 'D' ? '#21AD93' : '#666'}
+                x={-18}
+                y={-9}
+                width={36}
+                height={18}
+                fill={selectedPivot === 'D' ? '#21AD93' : '#4A4A4A'}
               stroke="#fff"
-              strokeWidth={2}
+                strokeWidth={2.5}
               rx={3}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.4 }}
+                style={{ filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.25))' }}
             />
             <text 
-              y={-32} 
+                y={-38} 
               textAnchor="middle" 
-              fill="#383838" 
-              fontSize="28" 
+                fill="#2A2A2A" 
+                fontSize="26" 
               fontWeight="bold"
               style={{ 
                 filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.2))',
@@ -188,9 +190,9 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
             </defs>
             <line
               x1={weightX}
-              y1={beamY - 30}
+                y1={beamY - 35}
               x2={weightX}
-              y2={beamY - 30 - scaleArrow(100)}
+                y2={beamY - 35 - scaleArrow(100)}
               stroke={getArrowColor('weight')}
               strokeWidth="6"
               markerEnd="url(#arrowhead-down)"
@@ -207,6 +209,18 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
             >
               W = 100N
             </text>
+              {/* Arrow label below */}
+              <text
+                x={weightX}
+                y={beamY - 15}
+                textAnchor="middle"
+                fill={getArrowColor('weight')}
+                fontSize="14"
+                fontWeight="600"
+                style={{ filter: 'drop-shadow(0px 1px 1px rgba(0,0,0,0.2))' }}
+              >
+                Weight
+              </text>
           </motion.g>
           
           {/* Reaction at B - Vertical (upward) - Snap Zone: Below beam, left of support */}
@@ -240,11 +254,12 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
                 transition={{ duration: 0.3 }}
               />
               <text
-                x={supportBX - 100}
-                y={beamY + arrowSpacing + 160}
+             x={supportBX - 40}
+             y={beamY + arrowSpacing + 180}
                 fill={getArrowColor('reaction-b-v')}
-                fontSize="32"
-                fontWeight="bold"
+             fontSize="16"
+             fontWeight="600"
+             textAnchor="middle"
                 style={{ 
                   filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.3))'
                 }}
@@ -255,7 +270,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
           )}
           
           {/* Reaction at B - Horizontal (right) */}
-          {forces.find((f) => f.id === 'reaction-b-h')?.identified && Math.abs(reactionBHorizontal) > 2 && (
+          {forces.find((f) => f.id === 'reaction-b-h')?.identified && Math.abs(reactionBHorizontal) > 1 && (
             <motion.g
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -278,17 +293,28 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               </defs>
               <motion.line
                 x1={supportBX}
-                y1={beamY - 30}
+                  y1={beamY - 40}
                 x2={supportBX + (reactionBHorizontal > 0 ? 1 : -1) * scaleArrow(Math.abs(reactionBHorizontal), 50)}
-                y2={beamY - 30}
+                  y2={beamY - 40}
                 stroke={getArrowColor('reaction-b-h')}
-                strokeWidth="5"
+                  strokeWidth="6"
                 markerEnd="url(#arrowhead-right)"
                 animate={{
                   x2: supportBX + (reactionBHorizontal > 0 ? 1 : -1) * scaleArrow(Math.abs(reactionBHorizontal), 50)
                 }}
                 transition={{ duration: 0.3 }}
               />
+                <text
+                  x={supportBX + (reactionBHorizontal > 0 ? 35 : -35)}
+                  y={beamY - 48}
+                  textAnchor="middle"
+                  fill={getArrowColor('reaction-b-h')}
+                  fontSize="14"
+                  fontWeight="600"
+                  style={{ filter: 'drop-shadow(0px 1px 1px rgba(0,0,0,0.2))' }}
+                >
+                  Rb,h
+                </text>
             </motion.g>
           )}
           
@@ -323,11 +349,12 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
                 transition={{ duration: 0.3 }}
               />
               <text
-                x={supportDX + 55}
-                y={beamY + arrowSpacing + 160}
+             x={supportDX + 40}
+             y={beamY + arrowSpacing + 180}
                 fill={getArrowColor('reaction-d')}
-                fontSize="32"
-                fontWeight="bold"
+             fontSize="16"
+             fontWeight="600"
+             textAnchor="middle"
                 style={{ 
                   filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.3))'
                 }}
