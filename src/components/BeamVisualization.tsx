@@ -98,7 +98,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               animate={{ scale: 1 }}
               transition={{ delay: 0.3 }}
             />
-            <text y={40} textAnchor="middle" fill="#383838" fontSize="18" fontWeight="bold">
+            <text y={40} textAnchor="middle" fill="#383838" fontSize="22" fontWeight="bold">
               B
             </text>
           </g>
@@ -118,7 +118,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               animate={{ scale: 1 }}
               transition={{ delay: 0.4 }}
             />
-            <text y={40} textAnchor="middle" fill="#383838" fontSize="18" fontWeight="bold">
+            <text y={40} textAnchor="middle" fill="#383838" fontSize="22" fontWeight="bold">
               D
             </text>
           </g>
@@ -132,7 +132,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               animate={{ scale: 1 }}
               transition={{ delay: 0.5 }}
             />
-            <text y={-20} textAnchor="middle" fill="#383838" fontSize="16" fontWeight="bold">
+            <text y={-20} textAnchor="middle" fill="#383838" fontSize="20" fontWeight="bold">
               C
             </text>
           </g>
@@ -168,7 +168,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               x={weightX + 15}
               y={beamY - 70}
               fill={getArrowColor('weight')}
-              fontSize="18"
+              fontSize="22"
               fontWeight="bold"
             >
               W = 100N
@@ -209,7 +209,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
                 x={supportBX - 60}
                 y={beamY + 100}
                 fill={getArrowColor('reaction-b-v')}
-                fontSize="16"
+                fontSize="20"
                 fontWeight="bold"
               >
                 Rb,v
@@ -289,7 +289,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
                 x={supportDX + 30}
                 y={beamY + 100}
                 fill={getArrowColor('reaction-d')}
-                fontSize="16"
+                fontSize="20"
                 fontWeight="bold"
               >
                 Rd
@@ -317,7 +317,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
             y={40}
             textAnchor="middle"
             fill={tiltAngle > 0 ? '#FF6E6C' : '#007AFF'}
-            fontSize="20"
+            fontSize="24"
             fontWeight="bold"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
