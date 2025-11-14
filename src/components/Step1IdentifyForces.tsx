@@ -1,103 +1,61 @@
 import { motion } from 'framer-motion'
-import { useState } from 'react'
 import { useSimulatorStore } from '../store/simulatorStore'
 import BeamVisualization from './BeamVisualization'
 
-interface QuizOption {
+interface ForceInfo {
   id: string
-  text: string
-  correct: boolean
-  explanation?: string
+  name: string
+  description: string
+  icon: string
+  color: string
 }
 
-interface Question {
-  id: string
-  question: string
-  options: QuizOption[]
-  forceId: string
-}
-
-const questions: Question[] = [
+const forcesList: ForceInfo[] = [
   {
-    id: 'q1',
-    question: 'Which of these are vertical forces acting on the beam?',
-    forceId: 'weight',
-    options: [
-      { id: 'a', text: 'Weight (W) acting downward', correct: true },
-      { id: 'b', text: 'Friction force acting horizontally', correct: false, explanation: 'Friction is horizontal, not vertical.' },
-      { id: 'c', text: 'Tension acting at an angle', correct: false, explanation: 'No tension forces in this problem.' },
-    ],
+    id: 'weight',
+    name: 'Weight (W)',
+    description: '100N downward force from the mass on the beam',
+    icon: '⬇️',
+    color: 'bg-md-coral/20 border-md-coral',
   },
   {
-    id: 'q2',
-    question: 'Where should the reaction at support B act?',
-    forceId: 'reaction-b-v',
-    options: [
-      { id: 'a', text: 'Only vertically upward', correct: false, explanation: 'Hinges provide both components.' },
-      { id: 'b', text: 'Both horizontal and vertical components', correct: true },
-      { id: 'c', text: 'Only horizontally', correct: false, explanation: 'Support must resist vertical loads too.' },
-    ],
+    id: 'reaction-b-v',
+    name: 'Reaction at B (Vertical)',
+    description: 'Vertical component of the hinge reaction at support B',
+    icon: '⬆️',
+    color: 'bg-md-blue/20 border-md-blue',
   },
   {
-    id: 'q3',
-    question: 'What type of support is at point D?',
-    forceId: 'reaction-d',
-    options: [
-      { id: 'a', text: 'Pin support (horizontal & vertical)', correct: false, explanation: 'Point D is a roller support.' },
-      { id: 'b', text: 'Roller support (vertical only)', correct: true },
-      { id: 'c', text: 'Fixed support (moment & forces)', correct: false, explanation: 'No moment resistance at D.' },
-    ],
+    id: 'reaction-b-h',
+    name: 'Reaction at B (Horizontal)',
+    description: 'Horizontal component of the hinge reaction at support B',
+    icon: '➡️',
+    color: 'bg-md-blue/20 border-md-blue',
   },
   {
-    id: 'q4',
-    question: 'Does the hinge reaction at B have horizontal component?',
-    forceId: 'reaction-b-h',
-    options: [
-      { id: 'a', text: 'No, hinges only provide vertical reactions', correct: false, explanation: 'Hinges provide both horizontal and vertical reaction components.' },
-      { id: 'b', text: 'Yes, hinges provide both horizontal and vertical components', correct: true },
-      { id: 'c', text: 'Only if there is a horizontal applied force', correct: false, explanation: 'Hinges can have horizontal reactions even without applied horizontal forces.' },
-    ],
+    id: 'reaction-d',
+    name: 'Reaction at D',
+    description: 'Vertical reaction from the roller support at point D',
+    icon: '⬆️',
+    color: 'bg-md-teal/20 border-md-teal',
   },
 ]
 
 export default function Step1IdentifyForces() {
   const { forces, identifyForce } = useSimulatorStore()
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [selectedOption, setSelectedOption] = useState<string | null>(null)
-  const [showFeedback, setShowFeedback] = useState(false)
   
-  const currentQuestion = questions[currentQuestionIndex]
-  const isLastQuestion = currentQuestionIndex === questions.length - 1
   const allComplete = forces.every((f) => f.identified)
   
-  const handleOptionSelect = (optionId: string) => {
-    setSelectedOption(optionId)
-    setShowFeedback(true)
-    
-    const option = currentQuestion.options.find((o) => o.id === optionId)
-    if (option?.correct) {
-      identifyForce(currentQuestion.forceId)
-      
-      // Auto-advance after a delay
-      setTimeout(() => {
-        if (!isLastQuestion) {
-          setCurrentQuestionIndex(currentQuestionIndex + 1)
-          setSelectedOption(null)
-          setShowFeedback(false)
-        }
-      }, 1500)
+  const handleForceClick = (forceId: string) => {
+    const force = forces.find((f) => f.id === forceId)
+    if (!force?.identified) {
+      identifyForce(forceId)
     }
   }
   
-  const handleNext = () => {
-    if (!isLastQuestion) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1)
-      setSelectedOption(null)
-      setShowFeedback(false)
-    }
+  const isForceIdentified = (forceId: string) => {
+    return forces.find((f) => f.id === forceId)?.identified || false
   }
-  
-  const selectedOptionData = currentQuestion.options.find((o) => o.id === selectedOption)
   
   return (
     <div className="max-w-6xl mx-auto">
@@ -110,20 +68,18 @@ export default function Step1IdentifyForces() {
           Step 1: Identify Forces
         </h2>
         <p className="text-md-text/80 mb-4">
-          Answer the following questions to identify all forces acting on the beam. 
-          The visualization will update as you correctly identify each force.
+          Click on each force card below to identify the forces acting on the beam. 
+          The visualization will highlight and reveal each force as you identify it.
         </p>
         
         {/* Progress indicator */}
         <div className="flex items-center space-x-2 mb-4">
-          {questions.map((_, index) => (
+          {forcesList.map((force, index) => (
             <div
               key={index}
               className={`h-2 flex-1 rounded-full transition-all duration-300 ${
-                index < currentQuestionIndex
+                isForceIdentified(force.id)
                   ? 'bg-md-teal'
-                  : index === currentQuestionIndex
-                  ? 'bg-md-blue'
                   : 'bg-md-cloud'
               }`}
             />
@@ -132,89 +88,92 @@ export default function Step1IdentifyForces() {
       </motion.div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Quiz Section */}
-        <motion.div
-          key={currentQuestion.id}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="card"
-        >
-          <div className="mb-4">
-            <span className="text-sm font-semibold text-md-text/60 uppercase">
-              Question {currentQuestionIndex + 1} of {questions.length}
-            </span>
-            <h3 className="text-xl font-bold mt-2 text-md-text">
-              {currentQuestion.question}
+        {/* Interactive Force Cards */}
+        <div className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="card"
+          >
+            <h3 className="text-lg font-bold mb-4 text-md-text">
+              Forces Acting on the Beam
             </h3>
-          </div>
+            
+            <div className="space-y-3">
+              {forcesList.map((force) => {
+                const identified = isForceIdentified(force.id)
+                return (
+                  <motion.button
+                    key={force.id}
+                    onClick={() => handleForceClick(force.id)}
+                    disabled={identified}
+                    whileHover={!identified ? { scale: 1.02 } : {}}
+                    whileTap={!identified ? { scale: 0.98 } : {}}
+                    className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 ${
+                      identified
+                        ? `${force.color} border-2 cursor-default`
+                        : 'border-md-border bg-md-surface hover:border-md-blue hover:shadow-md cursor-pointer'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="text-3xl">{force.icon}</span>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-md-text">{force.name}</span>
+                          {identified && (
+                            <motion.span
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              className="text-md-teal text-2xl"
+                            >
+                              ✓
+                            </motion.span>
+                          )}
+                        </div>
+                        <p className="text-sm text-md-text/70">{force.description}</p>
+                      </div>
+                    </div>
+                  </motion.button>
+                )
+              })}
+            </div>
+          </motion.div>
           
-          <div className="space-y-3">
-            {currentQuestion.options.map((option) => (
-              <button
-                key={option.id}
-                onClick={() => handleOptionSelect(option.id)}
-                disabled={showFeedback}
-                className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ${
-                  selectedOption === option.id
-                    ? option.correct
-                      ? 'border-md-teal bg-md-teal/10'
-                      : 'border-md-coral bg-md-coral/10'
-                    : 'border-md-border bg-md-surface hover:border-md-blue hover:bg-md-blue/5'
-                } ${showFeedback ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold">{option.text}</span>
-                  {showFeedback && selectedOption === option.id && (
-                    <span className="text-xl">
-                      {option.correct ? '✓' : '✗'}
-                    </span>
-                  )}
-                </div>
-              </button>
-            ))}
-          </div>
-          
-          {/* Feedback */}
-          {showFeedback && selectedOptionData && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`mt-4 p-4 rounded-xl ${
-                selectedOptionData.correct
-                  ? 'bg-md-teal/10 border border-md-teal'
-                  : 'bg-md-coral/10 border border-md-coral'
-              }`}
-            >
-              <p className={`font-semibold ${
-                selectedOptionData.correct ? 'text-md-teal' : 'text-md-coral'
-              }`}>
-                {selectedOptionData.correct ? '✓ Correct!' : '✗ Not quite'}
-              </p>
-              {selectedOptionData.explanation && (
-                <p className="text-sm mt-1 text-md-text/80">
-                  {selectedOptionData.explanation}
-                </p>
-              )}
-            </motion.div>
-          )}
-          
-          {/* Skip button */}
-          {!isLastQuestion && !allComplete && (
-            <button
-              onClick={handleNext}
-              className="mt-4 text-sm text-md-blue hover:underline"
-            >
-              Skip this question →
-            </button>
-          )}
-        </motion.div>
+          {/* Hints */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="card bg-md-blue/5 border-md-blue"
+          >
+            <h4 className="font-bold mb-2 text-md-text">💡 Tips:</h4>
+            <ul className="text-sm text-md-text/80 space-y-1 list-disc list-inside">
+              <li>Click each force card to identify it on the diagram</li>
+              <li>Watch the beam diagram update as you identify forces</li>
+              <li>Hinges (like at B) provide both horizontal and vertical reactions</li>
+              <li>Rollers (like at D) only provide vertical reactions</li>
+              <li>The weight acts downward at the mass location</li>
+            </ul>
+          </motion.div>
+        </div>
         
         {/* Visualization Section */}
-        <div className="card">
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+          className="card"
+        >
           <h3 className="text-lg font-bold mb-4 text-md-text">
-            Beam Diagram
+            Free Body Diagram
           </h3>
-          <BeamVisualization highlightForce={currentQuestion.forceId} />
+          <BeamVisualization />
+          
+          <div className="mt-4 p-3 bg-md-cloud/50 rounded-lg">
+            <p className="text-sm text-md-text/70 text-center">
+              <strong>Legend:</strong> Gray arrows = not yet identified • Colored arrows = identified
+            </p>
+          </div>
           
           {allComplete && (
             <motion.div
@@ -227,7 +186,7 @@ export default function Step1IdentifyForces() {
               </p>
             </motion.div>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   )
