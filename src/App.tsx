@@ -55,10 +55,10 @@ function App() {
           transition={{ duration: 0.3 }}
           className="text-center mb-10"
         >
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-md-text tracking-tight">
+          <h1 className="text-5xl md:text-6xl font-extrabold mb-4 text-md-text tracking-tight">
             Rigid Body Equilibrium Walk-Through
           </h1>
-          <p className="text-lg md:text-xl text-md-text/80 font-medium">
+          <p className="text-xl md:text-2xl text-md-text/80 font-medium">
             Chapter 6.2 &mdash; Newton's First Law of Motion
           </p>
         </motion.div>

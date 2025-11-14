@@ -11,21 +11,23 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-4">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-md-blue rounded-xl flex items-center justify-center shadow-md hover:scale-105 transition-transform">
-              <span className="text-white font-bold text-2xl" aria-label="Physics Logo"></span>
-            </div>
+            <img 
+              src="https://www.np.edu.sg/images/default-source/default-album/img-logo.png?sfvrsn=764583a6_19" 
+              alt="NP Logo" 
+              className="h-12 w-auto object-contain"
+            />
             <div>
               <h1 className="text-xl md:text-2xl font-extrabold text-md-text tracking-tight">
-                Physics Simulator
+                Newton's First Law of Motion
               </h1>
               <p className="text-sm md:text-base text-md-text/70 font-medium">
-                MEF 6.2 &mdash; Rigid Body Equilibrium
+                Chapter 6.2 (Equilibrium of a Rigid Body)
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 bg-md-teal/10 text-md-teal rounded-full text-xs md:text-sm font-semibold uppercase shadow-sm">
-              Interactive
+            <span className="px-3 py-1 bg-md-cloud text-md-text/70 rounded-full text-xs md:text-sm font-medium shadow-sm">
+              Updated as at {new Date().toLocaleDateString('en-SG', { day: 'numeric', month: 'short', year: 'numeric' })}
             </span>
           </div>
         </div>

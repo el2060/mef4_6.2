@@ -64,10 +64,10 @@ export default function Step1IdentifyForces() {
         animate={{ opacity: 1, y: 0 }}
         className="card mb-6"
       >
-        <h2 className="text-2xl font-bold mb-3 text-md-text">
+        <h2 className="text-3xl font-bold mb-3 text-md-text">
           Step 1: Identify Forces
         </h2>
-        <p className="text-md-text/80 mb-4">
+        <p className="text-lg text-md-text/80 mb-4">
           Click on each force card below to identify the forces acting on the beam. 
           The visualization will highlight and reveal each force as you identify it.
         </p>
@@ -95,7 +95,7 @@ export default function Step1IdentifyForces() {
             animate={{ opacity: 1, x: 0 }}
             className="card"
           >
-            <h3 className="text-lg font-bold mb-4 text-md-text">
+            <h3 className="text-xl font-bold mb-4 text-md-text">
               Forces Acting on the Beam
             </h3>
             
@@ -119,7 +119,7 @@ export default function Step1IdentifyForces() {
                       <span className="text-3xl">{force.icon}</span>
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="font-bold text-md-text">{force.name}</span>
+                          <span className="font-bold text-md-text text-lg">{force.name}</span>
                           {identified && (
                             <motion.span
                               initial={{ scale: 0 }}
@@ -130,7 +130,7 @@ export default function Step1IdentifyForces() {
                             </motion.span>
                           )}
                         </div>
-                        <p className="text-sm text-md-text/70">{force.description}</p>
+                        <p className="text-base text-md-text/70">{force.description}</p>
                       </div>
                     </div>
                   </motion.button>
@@ -146,8 +146,8 @@ export default function Step1IdentifyForces() {
             transition={{ delay: 0.2 }}
             className="card bg-md-blue/5 border-md-blue"
           >
-            <h4 className="font-bold mb-2 text-md-text">💡 Tips:</h4>
-            <ul className="text-sm text-md-text/80 space-y-1 list-disc list-inside">
+            <h4 className="font-bold mb-2 text-md-text text-lg">💡 Tips:</h4>
+            <ul className="text-base text-md-text/80 space-y-1 list-disc list-inside">
               <li>Click each force card to identify it on the diagram</li>
               <li>Watch the beam diagram update as you identify forces</li>
               <li>Hinges (like at B) provide both horizontal and vertical reactions</li>
@@ -164,13 +164,13 @@ export default function Step1IdentifyForces() {
           transition={{ delay: 0.1 }}
           className="card"
         >
-          <h3 className="text-lg font-bold mb-4 text-md-text">
+          <h3 className="text-xl font-bold mb-4 text-md-text">
             Free Body Diagram
           </h3>
           <BeamVisualization />
           
           <div className="mt-4 p-3 bg-md-cloud/50 rounded-lg">
-            <p className="text-sm text-md-text/70 text-center">
+            <p className="text-base text-md-text/70 text-center">
               <strong>Legend:</strong> Gray arrows = not yet identified • Colored arrows = identified
             </p>
           </div>

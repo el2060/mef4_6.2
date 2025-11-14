@@ -40,10 +40,11 @@
 
 html, body {
   font-family: var(--font-mono);
-  line-height: 1.55;
+  line-height: 1.6;
   background-color: var(--md-bg);
   color: var(--md-text);
   min-height: 100vh;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

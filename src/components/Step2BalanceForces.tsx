@@ -57,10 +57,10 @@ export default function Step2BalanceForces() {
         animate={{ opacity: 1, y: 0 }}
         className="card mb-6"
       >
-        <h2 className="text-2xl font-bold mb-3 text-md-text">
+        <h2 className="text-3xl font-bold mb-3 text-md-text">
           Step 2: Balance Forces
         </h2>
-        <p className="text-md-text/80 mb-4">
+        <p className="text-lg text-md-text/80 mb-4">
           Adjust the sliders to balance all forces. Watch the force indicators turn green 
           when equilibrium is achieved (ΣFx = 0, ΣFy = 0).
         </p>
@@ -95,7 +95,7 @@ export default function Step2BalanceForces() {
             transition={{ delay: 0.1 }}
             className="card"
           >
-            <h3 className="text-lg font-bold mb-4 text-md-text">
+            <h3 className="text-xl font-bold mb-4 text-md-text">
               Adjust Reaction Forces
             </h3>
             
@@ -139,8 +139,8 @@ export default function Step2BalanceForces() {
             transition={{ delay: 0.2 }}
             className="card bg-md-blue/5 border-md-blue"
           >
-            <h4 className="font-bold mb-2 text-md-text">💡 Hints:</h4>
-            <ul className="text-sm text-md-text/80 space-y-1 list-disc list-inside">
+            <h4 className="font-bold mb-2 text-md-text text-lg">💡 Hints:</h4>
+            <ul className="text-base text-md-text/80 space-y-1 list-disc list-inside">
               <li>Weight = 100N downward</li>
               <li>For horizontal equilibrium: ΣFx should be close to zero</li>
               <li>For vertical equilibrium: Upward forces = Downward forces</li>
@@ -156,7 +156,7 @@ export default function Step2BalanceForces() {
           transition={{ delay: 0.1 }}
           className="card"
         >
-          <h3 className="text-lg font-bold mb-4 text-md-text">
+          <h3 className="text-xl font-bold mb-4 text-md-text">
             Force Diagram
           </h3>
           <BeamVisualization />
