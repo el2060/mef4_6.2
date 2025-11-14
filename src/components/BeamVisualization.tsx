@@ -25,10 +25,8 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
   const beamStart = 50
   const arrowSpacing = 70 // Vertical spacing between beam and arrows
   
-  // Calculate tilt transform
-  const tiltTransform = showTilt && tiltAngle !== 0
-    ? `rotate(${tiltAngle}, ${width / 2}, ${beamY})`
-    : ''
+  // Calculate pivot for rotation (used in tilt mode)
+  // Will be computed after positions are available
   
   // Get arrow color based on identification or highlight
   const getArrowColor = (forceId: string) => {
@@ -49,6 +47,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
   const weightX = getXPosition(massPosition)
   const supportBX = getXPosition(20)
   const supportDX = getXPosition(80)
+  const pivotX = selectedPivot === 'B' ? supportBX : selectedPivot === 'D' ? supportDX : getXPosition(50)
   
   // Arrow scaling based on magnitude
   const scaleArrow = (magnitude: number, max: number = 100) => {
@@ -72,7 +71,11 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
         <rect width={width} height={height} fill="url(#grid)" opacity="0.3" />
         
         {/* Main beam group (with tilt) */}
-        <g transform={tiltTransform}>
+        <motion.g
+          animate={{ rotate: showTilt ? tiltAngle : 0 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+          style={{ transformOrigin: `${pivotX}px ${beamY}px` }}
+        >
           {/* Beam */}
           <motion.rect
             x={beamStart}
@@ -84,12 +87,24 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
-            style={{ transformOrigin: `${beamStart}px ${beamY}px` }}
+            style={{ transformOrigin: `${pivotX}px ${beamY}px` }}
           />
-          
-          {/* Support markers */}
+          {/* Mass indicator rotates with beam */}
+          <motion.circle
+            cx={weightX}
+            cy={beamY}
+            r={8}
+            fill="#FF6E6C"
+            stroke="#fff"
+            strokeWidth={2}
+            animate={{ cx: weightX }}
+            transition={{ duration: 0.3 }}
+          />
+        </motion.g>
+
+        {/* Support markers (kept upright with counter-rotation) */}
           {/* Support B (Hinge) */}
-          <g transform={`translate(${supportBX}, ${beamY + 25})`}>
+          <g transform={`translate(${supportBX}, ${beamY + 25}) rotate(${-tiltAngle}, ${supportBX}, ${beamY})`}>
             <motion.circle
                 r={20}
                 fill={selectedPivot === 'B' ? '#007AFF' : '#4A4A4A'}
@@ -116,7 +131,7 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
           </g>
           
           {/* Support D (Roller) */}
-          <g transform={`translate(${supportDX}, ${beamY + 25})`}>
+          <g transform={`translate(${supportDX}, ${beamY + 25}) rotate(${-tiltAngle}, ${supportDX}, ${beamY})`}>
             <motion.rect
                 x={-18}
                 y={-9}
@@ -146,8 +161,8 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
             </text>
           </g>
           
-          {/* Center point C */}
-          <g transform={`translate(${getXPosition(50)}, ${beamY})`}>
+          {/* Center point C (kept upright) */}
+          <g transform={`translate(${getXPosition(50)}, ${beamY}) rotate(${-tiltAngle}, ${getXPosition(50)}, ${beamY})`}>
             <motion.circle
               r={12}
               fill={selectedPivot === 'C' ? '#FFE100' : '#999'}
@@ -170,8 +185,9 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
             </text>
           </g>
           
-          {/* Weight (downward arrow) - Snap Zone: Centered above beam */}
+          {/* Weight (downward arrow) - kept vertical */}
           <motion.g
+            transform={`rotate(${-tiltAngle}, ${weightX}, ${beamY})`}
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
@@ -223,9 +239,10 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
               </text>
           </motion.g>
           
-          {/* Reaction at B - Vertical (upward) - Snap Zone: Below beam, left of support */}
+          {/* Reaction at B - Vertical (upward) - kept vertical */}
           {forces.find((f) => f.id === 'reaction-b-v')?.identified && (
             <motion.g
+              transform={`rotate(${-tiltAngle}, ${supportBX - 40}, ${beamY + arrowSpacing})`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
@@ -269,9 +286,10 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
             </motion.g>
           )}
           
-          {/* Reaction at B - Horizontal (right) */}
+          {/* Reaction at B - Horizontal (right) - kept horizontal */}
           {forces.find((f) => f.id === 'reaction-b-h')?.identified && Math.abs(reactionBHorizontal) > 1 && (
             <motion.g
+              transform={`rotate(${-tiltAngle}, ${supportBX}, ${beamY - 40})`}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.8 }}
@@ -318,9 +336,10 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
             </motion.g>
           )}
           
-          {/* Reaction at D (upward) - Snap Zone: Below beam, right of support */}
+          {/* Reaction at D (upward) - kept vertical */}
           {forces.find((f) => f.id === 'reaction-d')?.identified && (
             <motion.g
+              transform={`rotate(${-tiltAngle}, ${supportDX + 40}, ${beamY + arrowSpacing})`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
@@ -364,37 +383,25 @@ export default function BeamVisualization({ highlightForce, showTilt = false }: 
             </motion.g>
           )}
           
-          {/* Mass indicator */}
-          <motion.circle
-            cx={weightX}
-            cy={beamY}
-            r={8}
-            fill="#FF6E6C"
-            stroke="#fff"
-            strokeWidth={2}
-            animate={{ cx: weightX }}
-            transition={{ duration: 0.3 }}
-          />
-        </g>
+        {/* Pivot highlight glow */}
+        {showTilt && (
+          <circle cx={pivotX} cy={beamY} r={26} fill="none" stroke={selectedPivot === 'B' ? '#007AFF' : selectedPivot === 'D' ? '#21AD93' : '#FFE100'} strokeWidth={2} opacity={0.35} />
+        )}
         
-        {/* Tilt indicator */}
-        {showTilt && Math.abs(tiltAngle) > 0.5 && (
-          <motion.text
-            x={width / 2}
-            y={50}
-            textAnchor="middle"
-            fill={tiltAngle > 0 ? '#FF6E6C' : '#007AFF'}
-            fontSize="32"
-            fontWeight="bold"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            style={{ 
-              filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.3))',
-              textShadow: '0 0 4px white'
-            }}
-          >
-            {tiltAngle > 0 ? '↻ Clockwise' : '↺ Counter-clockwise'}
-          </motion.text>
+        {/* Moment direction indicator (static, top-left) */}
+        {showTilt && (
+          <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <text
+              x={120}
+              y={60}
+              textAnchor="start"
+              fill={tiltAngle > 0 ? '#FF6E6C' : '#007AFF'}
+              fontSize="20"
+              fontWeight="bold"
+            >
+              {tiltAngle > 0 ? '↻ Clockwise Moment (Red)' : '↺ Counterclockwise Moment (Blue)'}
+            </text>
+          </motion.g>
         )}
       </svg>
     </div>

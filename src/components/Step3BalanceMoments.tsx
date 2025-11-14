@@ -14,9 +14,9 @@ export default function Step3BalanceMoments() {
   } = useSimulatorStore()
   
   const pivots = [
-    { id: 'B' as const, label: 'Point B (Left Support)', position: 20 },
-    { id: 'C' as const, label: 'Point C (Center)', position: 50 },
-    { id: 'D' as const, label: 'Point D (Right Support)', position: 80 },
+    { id: 'B' as const, label: 'Point B (Left Support)', sub: 'Pivot for moments about B', position: 20 },
+    { id: 'C' as const, label: 'Point C (Center)', sub: 'Pivot for moments about C', position: 50 },
+    { id: 'D' as const, label: 'Point D (Right Support)', sub: 'Pivot for moments about D', position: 80 },
   ]
   
   const getBalanceColor = (status: 'unbalanced' | 'almost' | 'balanced') => {
@@ -113,14 +113,17 @@ export default function Step3BalanceMoments() {
                 <button
                   key={pivot.id}
                   onClick={() => setSelectedPivot(pivot.id)}
-                  className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ${
+                  className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
                     selectedPivot === pivot.id
                       ? 'border-md-blue bg-md-blue/10'
                       : 'border-md-border bg-md-surface hover:border-md-blue/50'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold">{pivot.label}</span>
+                    <div className="flex flex-col">
+                      <span className="font-semibold leading-tight">{pivot.label}</span>
+                      <span className="text-xs text-md-text/60 mt-0.5">{pivot.sub}</span>
+                    </div>
                     {selectedPivot === pivot.id && (
                       <span className="text-md-blue text-xl">✓</span>
                     )}
@@ -149,7 +152,13 @@ export default function Step3BalanceMoments() {
               max={90}
               unit="%"
               color="coral"
+              helpText="Move the mass along the beam"
+              floatingValue
             />
+            <div className="flex items-center justify-between text-xs text-md-text/60 mt-2">
+              <span>⚫ Mass Move ←</span>
+              <span>→ Mass Move ⚫</span>
+            </div>
           </motion.div>
           
           {/* Hints */}
@@ -159,14 +168,24 @@ export default function Step3BalanceMoments() {
             transition={{ delay: 0.3 }}
             className="card bg-md-blue/5 border-md-blue"
           >
-            <h4 className="font-bold mb-2 text-md-text text-lg">💡 Hints:</h4>
-            <ul className="text-base text-md-text/80 space-y-1 list-disc list-inside">
-              <li>Choose a pivot point (B, C, or D)</li>
-              <li>Moment = Force × Distance from pivot</li>
-              <li>Clockwise moments = Positive</li>
-              <li>Counter-clockwise moments = Negative</li>
-              <li>Balance when beam is horizontal</li>
-            </ul>
+            <h4 className="font-bold mb-3 text-md-text text-lg">💡 Tips</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <div className="font-semibold mb-1">Concepts</div>
+                <ul className="text-base text-md-text/80 space-y-1 list-disc list-inside">
+                  <li>🔘 Choose a pivot point (B, C, or D)</li>
+                  <li>↔ Moment = Force × Distance</li>
+                  <li>↻ Clockwise = Positive</li>
+                  <li>↺ Counterclockwise = Negative</li>
+                </ul>
+              </div>
+              <div>
+                <div className="font-semibold mb-1">Goal</div>
+                <ul className="text-base text-md-text/80 space-y-1 list-disc list-inside">
+                  <li>🎯 Adjust mass until the beam becomes horizontal</li>
+                </ul>
+              </div>
+            </div>
           </motion.div>
         </div>
         
@@ -177,10 +196,17 @@ export default function Step3BalanceMoments() {
           transition={{ delay: 0.1 }}
           className="card"
         >
-          <h3 className="text-2xl font-bold mb-6 text-md-text">
+          <h3 className="text-2xl font-bold mb-4 text-md-text">
             Beam with Tilt Animation
           </h3>
-          <BeamVisualization showTilt />
+          <div className="bg-gradient-to-br from-md-cloud/30 to-md-cloud/10 rounded-xl p-6 border border-md-cloud shadow-inner">
+            <div className="flex justify-center">
+              <BeamVisualization showTilt />
+            </div>
+          </div>
+          <div className="mt-4 text-sm text-md-text/70">
+            {Math.abs(tiltAngle) < 0.5 ? 'Beam is horizontal (balanced)' : tiltAngle > 0 ? 'Beam is tilting clockwise' : 'Beam is tilting counterclockwise'}
+          </div>
           
           {momentBalance === 'balanced' && (
             <motion.div
