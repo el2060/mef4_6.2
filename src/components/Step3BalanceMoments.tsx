@@ -177,7 +177,7 @@ export default function Step3BalanceMoments() {
           transition={{ delay: 0.1 }}
           className="card"
         >
-          <h3 className="text-xl font-bold mb-4 text-md-text">
+          <h3 className="text-2xl font-bold mb-6 text-md-text">
             Beam with Tilt Animation
           </h3>
           <BeamVisualization showTilt />
@@ -186,9 +186,9 @@ export default function Step3BalanceMoments() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="mt-4 p-4 bg-md-teal/10 border border-md-teal rounded-xl"
+              className="mt-6 p-5 bg-md-teal/10 border border-md-teal rounded-xl"
             >
-              <p className="font-semibold text-md-teal text-center">
+              <p className="font-semibold text-md-teal text-center text-lg">
                 🎉 Moments are balanced! You've achieved complete equilibrium!
               </p>
             </motion.div>
